@@ -14,7 +14,6 @@ export default function NoteDetailsScreen({ route, navigation }) {
   const { width } = useWindowDimensions(); // Pobranie szerokości okna do responsywności
 
   return (
-    // Główna sekcja ekranu
     <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
@@ -23,19 +22,19 @@ export default function NoteDetailsScreen({ route, navigation }) {
       <Text style={styles.content}>{note.content}</Text>
 
       {/* Zdjęcie, jeśli jest dostępne */}
-      {note.image ? (
+      {note.image && (
         <TouchableOpacity
           onPress={() => navigation.navigate("Zdjęcie", { uri: note.image })}
         >
           <Image source={{ uri: note.image }} style={styles.image} />
         </TouchableOpacity>
-      ) : null}
+      )}
 
       {/* Przycisk przejścia do edycji */}
       <Button
         mode="contained"
-        style={styles.fullWidthButton}
         onPress={() => navigation.navigate("Edycja", { note })}
+        style={styles.button}
       >
         Edytuj
       </Button>
@@ -60,13 +59,14 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 200,
+    height: 300,
     marginBottom: 24,
     borderRadius: 8,
   },
-  fullWidthButton: {
+  button: {
     width: "100%",
-    paddingVertical: 10,
+    height: 48,
     borderRadius: 6,
+    justifyContent: "center",
   },
 });
