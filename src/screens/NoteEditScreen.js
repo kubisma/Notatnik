@@ -6,11 +6,11 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-} from "react-native";
-import { TextInput, Button } from "react-native-paper";
-import * as ImagePicker from "expo-image-picker";
-import uuid from "react-native-uuid";
-import { NoteContext } from "../contexts/NoteContext";
+} from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
+import uuid from 'react-native-uuid';
+import { NoteContext } from '../contexts/NoteContext';
 
 // Ekran do tworzenia lub edytowania notatki
 export default function NoteEditScreen({ route, navigation }) {
@@ -25,70 +25,61 @@ export default function NoteEditScreen({ route, navigation }) {
   // Ustawienie tytułu ekranu w zależności od trybu edycji
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: editingNote ? "Edytuj notatkę" : "Nowa notatka",
+      title: editingNote ? 'Edytuj notatkę' : 'Nowa notatka',
     });
   }, [navigation, editingNote]);
 
   // Zapisanie nowej lub zaktualizowanej notatki
   const handleSave = () => {
     if (!title.trim()) {
-      Alert.alert("Błąd", "Tytuł nie może być pusty");
+      Alert.alert('Błąd', 'Tytuł nie może być pusty');
       return;
     }
-    try {
-      const noteData = {
-        id: editingNote?.id || uuid.v4(),
-        title: title.trim(),
-        content: content.trim(),
-        image: image || '',
-      };
 
-      dispatch({
-        type: editingNote ? "UPDATE_NOTE" : "ADD_NOTE",
-        payload: noteData,
-      });
+    const noteData = {
+      id: editingNote?.id || uuid.v4(),
+      title: title.trim(),
+      content: content.trim(),
+      image: image || '',
+    };
 
-      navigation.navigate("Notatki"); // Powrót do listy
-    } catch (error) {
-      console.error("Błąd przy zapisie notatki:", error);
-      Alert.alert("Błąd", "Wystąpił problem przy zapisywaniu notatki.");
-    }
+    dispatch({
+      type: editingNote ? 'UPDATE_NOTE' : 'ADD_NOTE',
+      payload: noteData,
+    });
+
+    navigation.navigate('Notatki'); // Powrót do listy
   };
 
   // Wykonanie zdjęcia i dodanie do notatki
   const handlePickImage = async () => {
-    try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Brak uprawnień do aparatu");
-        return;
-      }
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Brak uprawnień do aparatu');
+      return;
+    }
 
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 0.5,
-      });
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.5,
+    });
 
-      if (!result.canceled && result.assets.length > 0) {
-        setImage(result.assets[0].uri); // Ustawienie obrazu
-      }
-    } catch (error) {
-      console.error("Błąd przy robieniu zdjęcia:", error);
-      Alert.alert("Błąd", "Nie udało się zrobić zdjęcia.");
+    if (!result.canceled && result.assets.length > 0) {
+      setImage(result.assets[0].uri); // Ustawienie obrazu
     }
   };
 
   // Usunięcie zdjęcia z notatki
   const handleRemoveImage = () => {
-    Alert.alert("Usuń zdjęcie", "Czy na pewno chcesz usunąć zdjęcie?", [
-      { text: "Anuluj", style: "cancel" },
-      { text: "Usuń", style: "destructive", onPress: () => setImage("") },
+    Alert.alert('Usuń zdjęcie', 'Czy na pewno chcesz usunąć zdjęcie?', [
+      { text: 'Anuluj', style: 'cancel' },
+      { text: 'Usuń', style: 'destructive', onPress: () => setImage('') },
     ]);
   };
 
   // Otworzenie obrazu w pełnym ekranie
   const handleOpenFullScreen = () => {
-    navigation.navigate("Zdjęcie", { uri: image });
+    navigation.navigate('Zdjęcie', { uri: image });
   };
 
   return (
@@ -129,7 +120,7 @@ export default function NoteEditScreen({ route, navigation }) {
         </>
       ) : null}
 
-      {/* Przycisk robienia zdjęcia */}
+      {/* Przycisk do zrobienia zdjęcia */}
       <Button mode="outlined" onPress={handlePickImage} style={styles.button}>
         Zrób zdjęcie
       </Button>
@@ -144,16 +135,26 @@ export default function NoteEditScreen({ route, navigation }) {
 
 // Style
 const styles = StyleSheet.create({
-  container: { padding: 16 },
-  input: { marginBottom: 16 },
-  button: { marginBottom: 16 },
+  container: {
+    padding: 16,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  button: {
+    marginBottom: 16,
+    height: 48,
+    borderRadius: 6,
+    justifyContent: 'center',
+    width: '100%',
+  },
   removeButton: {
     marginBottom: 16,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   image: {
-    width: "100%",
-    height: 200,
+    width: '100%',
+    height: 300,
     marginBottom: 8,
     borderRadius: 8,
   },
