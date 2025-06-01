@@ -51,7 +51,7 @@ export default function NoteListScreen() {
         right={() => (
           <IconButton
             icon="delete"
-            onPress={() => confirmDelete(dispatch, item.id)} // Obsługuje usuwanie notatki
+            onPress={() => confirmDelete(dispatch, item.id)} // Obsługuje usuwania notatki
           />
         )}
       />
