@@ -11,16 +11,14 @@ import { Text, Button } from "react-native-paper";
 // Ekran wyświetlający szczegóły wybranej notatki
 export default function NoteDetailsScreen({ route, navigation }) {
   const { note } = route.params; // Pobranie danych notatki przekazanej z poprzedniego ekranu
-  const { width } = useWindowDimensions(); // Pobranie szerokości okna do responsywności
+  const { width } = useWindowDimensions(); // Pobranie szerokości okna
 
   return (
     <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
-
       {/* Treść notatki */}
       <Text style={styles.content}>{note.content}</Text>
-
       {/* Zdjęcie, jeśli jest dostępne */}
       {note.image && (
         <TouchableOpacity
@@ -29,7 +27,6 @@ export default function NoteDetailsScreen({ route, navigation }) {
           <Image source={{ uri: note.image }} style={styles.image} />
         </TouchableOpacity>
       )}
-
       {/* Przycisk przejścia do edycji */}
       <Button
         mode="contained"
