@@ -14,7 +14,7 @@ export default function ImageFullscreenScreen({ route, navigation }) {
     // Dotknięcie dowolnego miejsca zamyka widok
     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
       <View style={styles.container}>
-        {/* Wyświetlenie obrazka na pełnym ekranie */}
+        {/* Wyświetlenie zdjęcia na pełnym ekranie */}
         <Image source={{ uri }} style={styles.image} resizeMode="contain" />
       </View>
     </TouchableWithoutFeedback>
