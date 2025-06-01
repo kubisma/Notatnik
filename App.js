@@ -23,13 +23,9 @@ export default function App() {
         {/* Nawigacja w aplikacji */}
         <NavigationContainer>
           <Stack.Navigator>
-            {/* Ekran listy notatek */}
             <Stack.Screen name="Notatki" component={NoteListScreen} />
-            {/* Ekran szczegółów notatki */}
-            <Stack.Screen name="Szczegóły" component={NoteDetailsScreen} />
-            {/* Ekran edycji notatki */}
+            <Stack.Screen name="Szczegóły" component={NoteDetailsScreen} />           
             <Stack.Screen name="Edycja" component={NoteEditScreen} />
-            {/* Ekran pełnoekranowego zdjęcia */}
             <Stack.Screen
               name="Zdjęcie"
               component={ImageFullscreenScreen}
