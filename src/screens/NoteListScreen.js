@@ -36,7 +36,7 @@ const confirmDelete = (dispatch, noteId) => {
 export default function NoteListScreen() {
   const { notes, dispatch } = useContext(NoteContext); // Dostęp do notatek
   const navigation = useNavigation(); // Nawigacja między ekranami
-  const { width } = useWindowDimensions(); // Szerokość ekranu
+  const { width } = useWindowDimensions(); // Pobieranie szerokości okna
 
   // Funkcja renderująca pojedynczą notatkę
   const renderNoteItem = ({ item }) => (
@@ -51,7 +51,7 @@ export default function NoteListScreen() {
         right={() => (
           <IconButton
             icon="delete"
-            onPress={() => confirmDelete(dispatch, item.id)} // Obsługuje usuwania notatki
+            onPress={() => confirmDelete(dispatch, item.id)} // Obsługa usuwania notatki
           />
         )}
       />
