@@ -1,36 +1,20 @@
-import React from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from "react-native";
+import React from 'react';
+import { Modal, StyleSheet, View } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
-// Pełnoekranowy podgląd zdjęcia
+// Pełnoekranowy podgląd zdjęcia z zoomem
 export default function ImageFullscreenScreen({ route, navigation }) {
-  const { uri } = route.params; // Odbiór przekazanego adresu zdjęcia
+  const { uri } = route.params;
 
   return (
-    // Dotknięcie dowolnego miejsca zamyka widok
-    <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-      <View style={styles.container}>
-        {/* Wyświetlenie zdjęcia na pełnym ekranie */}
-        <Image source={{ uri }} style={styles.image} resizeMode="contain" />
-      </View>
-    </TouchableWithoutFeedback>
+    <Modal visible={true} transparent={true} onRequestClose={() => navigation.goBack()}>
+      <ImageViewer
+        imageUrls={[{ url: uri }]}
+        enableSwipeDown
+        onSwipeDown={() => navigation.goBack()}
+        renderIndicator={() => null}
+        backgroundColor="black"
+      />
+    </Modal>
   );
 }
-
-// Style
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-});
