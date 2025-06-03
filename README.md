@@ -13,6 +13,7 @@ Aplikacja mobilna do tworzenia, edycji i przeglądania notatek tekstowych oraz g
 ### Funkcje
 
 - Tworzenie notatek z tekstem i zdjęciem
+- Wyszukiwanie notatek
 - Edycja i usuwanie notatek
 - Podgląd zdjęcia w trybie pełnoekranowym
 - Zapisywanie danych lokalnie z użyciem `AsyncStorage`
