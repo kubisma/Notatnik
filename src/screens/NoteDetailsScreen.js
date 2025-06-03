@@ -8,26 +8,49 @@ import {
 } from "react-native";
 import { Text, Button } from "react-native-paper";
 
-// Ekran wyświetlający szczegóły wybranej notatki
+// Komponent ekranu szczegółów notatki
 export default function NoteDetailsScreen({ route, navigation }) {
-  const { note } = route.params; // Pobranie danych notatki przekazanej z poprzedniego ekranu
-  const { width } = useWindowDimensions(); // Pobranie szerokości okna
+  const note = route.params?.note; // Pobranie notatki z parametrów nawigacji
+  const { width } = useWindowDimensions(); // Użycie szerokości okna
+
+  // Komunikat o braku notatki
+  if (!note) {
+    return (
+      <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
+        <Text style={styles.title}>Nie znaleziono notatki.</Text>
+        <Button
+          mode="contained"
+          onPress={() => navigation.goBack()}
+          style={styles.button}
+        >
+          Wróć
+        </Button>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
+
       {/* Treść notatki */}
       <Text style={styles.content}>{note.content}</Text>
-      {/* Zdjęcie, jeśli jest dostępne */}
+
+      {/* Zdjęcie (jeśli istnieje) */}
       {note.image && (
         <TouchableOpacity
           onPress={() => navigation.navigate("Zdjęcie", { uri: note.image })}
         >
-          <Image source={{ uri: note.image }} style={styles.image} />
+          <Image
+            source={{ uri: note.image }}
+            style={styles.image}
+            resizeMode="cover"
+          />
         </TouchableOpacity>
       )}
-      {/* Przycisk przejścia do edycji */}
+
+      {/* Przycisk edycji */}
       <Button
         mode="contained"
         onPress={() => navigation.navigate("Edycja", { note })}
@@ -44,21 +67,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 24,
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
+    color: "#000",
   },
   content: {
     fontSize: 16,
     marginBottom: 24,
+    color: "#333",
   },
   image: {
     width: "100%",
     height: 300,
-    marginBottom: 24,
     borderRadius: 8,
+    marginBottom: 24,
+    backgroundColor: "#eee",
   },
   button: {
     width: "100%",
