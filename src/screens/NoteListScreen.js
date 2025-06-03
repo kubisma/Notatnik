@@ -1,48 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import {
   FlatList,
   View,
   StyleSheet,
   useWindowDimensions,
   Text,
-  Alert,
+  RefreshControl,
 } from 'react-native';
-import { FAB, Card, IconButton } from 'react-native-paper';
-import { NoteContext } from '../contexts/NoteContext';
+import { FAB, Card, IconButton, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { NoteContext } from '../contexts/NoteContext';
+import { confirmDelete } from '../utils/confirmDelete';
 
-// Funkcja do potwierdzenia usunięcia notatki
-const confirmDelete = (dispatch, noteId) => {
-  Alert.alert(
-    'Usuń notatkę',
-    'Czy na pewno chcesz usunąć notatkę?',
-    [
-      { text: 'Anuluj', style: 'cancel' },
-      {
-        text: 'Usuń',
-        style: 'destructive',
-        onPress: () =>
-          dispatch({
-            type: 'DELETE_NOTE',
-            payload: noteId,
-          }),
-      },
-    ],
-    { cancelable: true }
-  );
-};
-
-// Główny ekran wyświetlający listę notatek
 export default function NoteListScreen() {
-  const { notes, dispatch } = useContext(NoteContext); // Dostęp do notatek
-  const navigation = useNavigation(); // Nawigacja między ekranami
-  const { width } = useWindowDimensions(); // Pobieranie szerokości okna
+  const { notes, deleteNote } = useContext(NoteContext);
+  const navigation = useNavigation();
+  const { width } = useWindowDimensions();
 
-  // Funkcja renderująca pojedynczą notatkę
+  const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Filtrowanie notatek po tytule
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Obsługa odświeżania listy
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 500); // symulacja
+  }, []);
+
+  // Renderowanie pojedynczego elementu listy
   const renderNoteItem = ({ item }) => (
     <Card
-      style={[styles.card, { width: width * 0.9 }]} // Karta z notatką
-      onPress={() => navigation.navigate('Szczegóły', { note: item })} // Przejście do szczegółów
+      style={[styles.card, { width: width * 0.9 }]}
+      onPress={() => navigation.navigate('Szczegóły', { note: item })}
     >
       <Card.Title
         title={item.title}
@@ -51,7 +44,7 @@ export default function NoteListScreen() {
         right={() => (
           <IconButton
             icon="delete"
-            onPress={() => confirmDelete(dispatch, item.id)} // Obsługa usuwania notatki
+            onPress={() => confirmDelete(() => deleteNote(item.id))}
           />
         )}
       />
@@ -60,21 +53,34 @@ export default function NoteListScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Renderowanie listy notatek lub komunikatu, gdy brak notatek */}
-      {notes.length === 0 ? (
+      {/* Pole wyszukiwania */}
+      <TextInput
+        placeholder="Szukaj notatki..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        style={styles.searchInput}
+        mode="outlined"
+        left={<TextInput.Icon icon="magnify" />}
+      />
+
+      {/* Lista notatek lub komunikat o braku */}
+      {filteredNotes.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Brak notatek</Text>
         </View>
       ) : (
         <FlatList
-          data={notes} // Lista notatek
-          keyExtractor={(item) => item.id} // Klucz dla każdej notatki
-          renderItem={renderNoteItem} // Renderowanie notatki
+          data={filteredNotes}
+          keyExtractor={(item) => item.id}
+          renderItem={renderNoteItem}
           contentContainerStyle={styles.listContent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
 
-      {/* Przycisk dodawania nowej notatki */}
+      {/* Przycisk dodania nowej notatki */}
       <FAB
         style={styles.fab}
         icon="plus"
@@ -89,6 +95,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 16,
+  },
+  searchInput: {
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
   listContent: {
     alignItems: 'center',
