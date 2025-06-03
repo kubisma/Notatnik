@@ -16,15 +16,19 @@ const Stack = createStackNavigator();
 // Główna funkcja aplikacji
 export default function App() {
   return (
-    // Dostarczenie kontekstu notatek do całej aplikacji
     <NoteProvider>
-      {/* Material Design */}
       <PaperProvider>
-        {/* Nawigacja w aplikacji */}
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: '#6851A4' },
+              headerTintColor: '#fff',
+              headerTitleStyle: { fontWeight: 'bold' },
+              headerTitleAlign: 'center',
+            }}
+          >
             <Stack.Screen name="Notatki" component={NoteListScreen} />
-            <Stack.Screen name="Szczegóły" component={NoteDetailsScreen} />           
+            <Stack.Screen name="Szczegóły" component={NoteDetailsScreen} />
             <Stack.Screen name="Edycja" component={NoteEditScreen} />
             <Stack.Screen
               name="Zdjęcie"
