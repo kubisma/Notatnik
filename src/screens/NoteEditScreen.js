@@ -12,25 +12,24 @@ import * as ImagePicker from 'expo-image-picker';
 import uuid from 'react-native-uuid';
 import { NoteContext } from '../contexts/NoteContext';
 
-// Ekran do tworzenia lub edytowania notatki
 export default function NoteEditScreen({ route, navigation }) {
-  const { dispatch } = useContext(NoteContext); // Pobieranie funkcji zarządzającej notatkami
-  const editingNote = route.params?.note; // Pobranie notatki, jeśli jest edytowana
+  const { addNote, updateNote } = useContext(NoteContext);
+  const editingNote = route.params?.note;
 
-  // Ustawienia początkowe pól formularza
+  // Stan lokalny formularza
   const [title, setTitle] = useState(editingNote?.title || '');
   const [content, setContent] = useState(editingNote?.content || '');
   const [image, setImage] = useState(editingNote?.image || '');
 
-  // Ustawienie tytułu ekranu w zależności od trybu edycji
+  // Dynamiczne ustawienie tytułu nagłówka
   useLayoutEffect(() => {
     navigation.setOptions({
       title: editingNote ? 'Edytuj notatkę' : 'Nowa notatka',
     });
   }, [navigation, editingNote]);
 
-  // Zapisanie nowej lub zaktualizowanej notatki
-  const handleSave = () => {
+  // Zapis notatki
+  const handleSave = async () => {
     if (!title.trim()) {
       Alert.alert('Błąd', 'Tytuł nie może być pusty');
       return;
@@ -43,29 +42,62 @@ export default function NoteEditScreen({ route, navigation }) {
       image: image || '',
     };
 
-    dispatch({
-      type: editingNote ? 'UPDATE_NOTE' : 'ADD_NOTE',
-      payload: noteData,
-    });
-
-    navigation.navigate('Notatki'); // Powrót do listy
+    try {
+      if (editingNote) {
+        await updateNote(noteData);
+      } else {
+        await addNote(noteData);
+      }
+      navigation.navigate('Notatki');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Błąd', 'Nie udało się zapisać notatki');
+    }
   };
 
-  // Wykonanie zdjęcia i dodanie do notatki
+  // Uruchomienie aparatu
   const handlePickImage = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Brak uprawnień do aparatu');
-      return;
+    try {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Brak dostępu', 'Nie masz uprawnień do używania aparatu.');
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.3,
+      });
+
+      if (!result.canceled && result.assets?.length > 0) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Błąd aparatu:', error);
+      Alert.alert('Błąd', 'Nie udało się uruchomić aparatu');
     }
+  };
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.5,
-    });
+  // Wybór zdjęcia z galerii
+  const handleChooseFromLibrary = async () => {
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Brak dostępu', 'Nie masz uprawnień do galerii.');
+        return;
+      }
 
-    if (!result.canceled && result.assets.length > 0) {
-      setImage(result.assets[0].uri); // Ustawienie obrazu
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.3,
+      });
+
+      if (!result.canceled && result.assets?.length > 0) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Błąd galerii:', error);
+      Alert.alert('Błąd', 'Nie udało się otworzyć galerii');
     }
   };
 
@@ -77,7 +109,7 @@ export default function NoteEditScreen({ route, navigation }) {
     ]);
   };
 
-  // Otworzenie obrazu w pełnym ekranie
+  // Otwórz zdjęcie w pełnym ekranie
   const handleOpenFullScreen = () => {
     navigation.navigate('Zdjęcie', { uri: image });
   };
@@ -93,7 +125,7 @@ export default function NoteEditScreen({ route, navigation }) {
         style={styles.input}
       />
 
-      {/* Pole treści */}
+      {/* Pole treści notatki */}
       <TextInput
         label="Treść notatki"
         mode="outlined"
@@ -104,7 +136,7 @@ export default function NoteEditScreen({ route, navigation }) {
         style={styles.input}
       />
 
-      {/* Obraz, jeśli istnieje */}
+      {/* Wyświetlanie wybranego zdjęcia */}
       {image ? (
         <>
           <TouchableOpacity onPress={handleOpenFullScreen}>
@@ -120,12 +152,20 @@ export default function NoteEditScreen({ route, navigation }) {
         </>
       ) : null}
 
-      {/* Przycisk do zrobienia zdjęcia */}
+      {/* Akcje związane ze zdjęciem */}
       <Button mode="outlined" onPress={handlePickImage} style={styles.button}>
         Zrób zdjęcie
       </Button>
 
-      {/* Przycisk zapisania notatki */}
+      <Button
+        mode="outlined"
+        onPress={handleChooseFromLibrary}
+        style={styles.button}
+      >
+        Wybierz z galerii
+      </Button>
+
+      {/* Zapis notatki */}
       <Button mode="contained" onPress={handleSave} style={styles.button}>
         Zapisz
       </Button>
