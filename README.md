@@ -1,7 +1,7 @@
 ### Notatnik - aplikacja React Native
 
 <div style="display: flex; gap: 10px;">
-  <img src="images/Screen 1.png" alt="Obrazek 1" style="width: 30%; height: auto;">
+  <img src="images/Image 1.png" alt="Obrazek 1" style="width: 30%; height: auto;">
   <img src="images/Screen 2.png" alt="Obrazek 2" style="width: 30%; height: auto;">
   <img src="images/Screen 3.png" alt="Obrazek 3" style="width: 30%; height: auto;">
   <img src="images/Screen 4.png" alt="Obrazek 4" style="width: 30%; height: auto;">
