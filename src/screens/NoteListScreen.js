@@ -28,7 +28,7 @@ export default function NoteListScreen() {
   // Obsługa odświeżania listy
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 500); // symulacja
+    setTimeout(() => setRefreshing(false), 500);
   }, []);
 
   // Renderowanie pojedynczego elementu listy
