@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import {
   FlatList,
   View,
@@ -11,6 +11,7 @@ import { FAB, Card, IconButton, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { NoteContext } from '../contexts/NoteContext';
 import { confirmDelete } from '../utils/confirmDelete';
+import colors from '../theme/colors';
 
 export default function NoteListScreen() {
   const { notes, deleteNote } = useContext(NoteContext);
@@ -34,7 +35,7 @@ export default function NoteListScreen() {
   // Renderowanie pojedynczego elementu listy
   const renderNoteItem = ({ item }) => (
     <Card
-      style={[styles.card, { width: width * 0.9 }]}
+      style={[styles.card, { width: width * 0.9, backgroundColor: colors.surface }]}
       onPress={() => navigation.navigate('Szczegóły', { note: item })}
     >
       <Card.Title
@@ -45,6 +46,7 @@ export default function NoteListScreen() {
           <IconButton
             icon="delete"
             onPress={() => confirmDelete(() => deleteNote(item.id))}
+            iconColor={colors.error}
           />
         )}
       />
@@ -60,6 +62,7 @@ export default function NoteListScreen() {
         onChangeText={setSearchQuery}
         style={styles.searchInput}
         mode="outlined"
+        theme={{ colors: { primary: colors.primary } }}
         left={<TextInput.Icon icon="magnify" />}
       />
 
@@ -75,15 +78,21 @@ export default function NoteListScreen() {
           renderItem={renderNoteItem}
           contentContainerStyle={styles.listContent}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
           }
         />
       )}
 
       {/* Przycisk dodania nowej notatki */}
       <FAB
-        style={styles.fab}
+        style={[styles.fab, { backgroundColor: colors.primary }]}
         icon="plus"
+        color={colors.onPrimary}
         onPress={() => navigation.navigate('Edycja')}
       />
     </View>
@@ -95,6 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 16,
+    backgroundColor: colors.background,
   },
   searchInput: {
     marginHorizontal: 16,
@@ -116,6 +126,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     textAlignVertical: 'center',
+    color: colors.text,
   },
   fab: {
     position: 'absolute',
@@ -130,7 +141,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 20,
-    color: 'gray',
+    color: colors.placeholder,
     textAlign: 'center',
   },
 });
