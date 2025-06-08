@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal, StyleSheet, View, Alert } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
