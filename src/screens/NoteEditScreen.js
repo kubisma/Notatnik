@@ -1,37 +1,37 @@
-import React, { useContext, useState, useLayoutEffect } from 'react';
+import { useContext, useState, useLayoutEffect } from "react";
 import {
-  View,
   StyleSheet,
   Alert,
   Image,
   ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import * as ImagePicker from 'expo-image-picker';
-import uuid from 'react-native-uuid';
-import { NoteContext } from '../contexts/NoteContext';
+} from "react-native";
+import { TextInput, Button } from "react-native-paper";
+import * as ImagePicker from "expo-image-picker";
+import uuid from "react-native-uuid";
+import { NoteContext } from "../contexts/NoteContext";
+import colors from "../theme/colors";
 
 export default function NoteEditScreen({ route, navigation }) {
   const { addNote, updateNote } = useContext(NoteContext);
   const editingNote = route.params?.note;
 
   // Stan lokalny formularza
-  const [title, setTitle] = useState(editingNote?.title || '');
-  const [content, setContent] = useState(editingNote?.content || '');
-  const [image, setImage] = useState(editingNote?.image || '');
+  const [title, setTitle] = useState(editingNote?.title || "");
+  const [content, setContent] = useState(editingNote?.content || "");
+  const [image, setImage] = useState(editingNote?.image || "");
 
   // Dynamiczne ustawienie tytułu nagłówka
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: editingNote ? 'Edytuj notatkę' : 'Nowa notatka',
+      title: editingNote ? "Edytuj notatkę" : "Nowa notatka",
     });
   }, [navigation, editingNote]);
 
-  // Zapis notatki
+  // Zapis notatki (nowa lub edycja)
   const handleSave = async () => {
     if (!title.trim()) {
-      Alert.alert('Błąd', 'Tytuł nie może być pusty');
+      Alert.alert("Błąd", "Tytuł nie może być pusty");
       return;
     }
 
@@ -39,7 +39,7 @@ export default function NoteEditScreen({ route, navigation }) {
       id: editingNote?.id || uuid.v4(),
       title: title.trim(),
       content: content.trim(),
-      image: image || '',
+      image: image || "",
     };
 
     try {
@@ -48,19 +48,19 @@ export default function NoteEditScreen({ route, navigation }) {
       } else {
         await addNote(noteData);
       }
-      navigation.navigate('Notatki');
+      navigation.navigate("Notatki");
     } catch (error) {
       console.error(error);
-      Alert.alert('Błąd', 'Nie udało się zapisać notatki');
+      Alert.alert("Błąd", "Nie udało się zapisać notatki");
     }
   };
 
-  // Uruchomienie aparatu
+  // Uruchomienie aparatu i zapis zdjęcia
   const handlePickImage = async () => {
     try {
       const permission = await ImagePicker.requestCameraPermissionsAsync();
       if (!permission.granted) {
-        Alert.alert('Brak dostępu', 'Nie masz uprawnień do używania aparatu.');
+        Alert.alert("Brak dostępu", "Nie masz uprawnień do używania aparatu.");
         return;
       }
 
@@ -73,8 +73,8 @@ export default function NoteEditScreen({ route, navigation }) {
         setImage(result.assets[0].uri);
       }
     } catch (error) {
-      console.error('Błąd aparatu:', error);
-      Alert.alert('Błąd', 'Nie udało się uruchomić aparatu');
+      console.error("Błąd aparatu:", error);
+      Alert.alert("Błąd", "Nie udało się uruchomić aparatu");
     }
   };
 
@@ -83,7 +83,7 @@ export default function NoteEditScreen({ route, navigation }) {
     try {
       const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!permission.granted) {
-        Alert.alert('Brak dostępu', 'Nie masz uprawnień do galerii.');
+        Alert.alert("Brak dostępu", "Nie masz uprawnień do galerii.");
         return;
       }
 
@@ -96,22 +96,22 @@ export default function NoteEditScreen({ route, navigation }) {
         setImage(result.assets[0].uri);
       }
     } catch (error) {
-      console.error('Błąd galerii:', error);
-      Alert.alert('Błąd', 'Nie udało się otworzyć galerii');
+      console.error("Błąd galerii:", error);
+      Alert.alert("Błąd", "Nie udało się otworzyć galerii");
     }
   };
 
   // Usunięcie zdjęcia z notatki
   const handleRemoveImage = () => {
-    Alert.alert('Usuń zdjęcie', 'Czy na pewno chcesz usunąć zdjęcie?', [
-      { text: 'Anuluj', style: 'cancel' },
-      { text: 'Usuń', style: 'destructive', onPress: () => setImage('') },
+    Alert.alert("Usuń zdjęcie", "Czy na pewno chcesz usunąć zdjęcie?", [
+      { text: "Anuluj", style: "cancel" },
+      { text: "Usuń", style: "destructive", onPress: () => setImage("") },
     ]);
   };
 
-  // Otwórz zdjęcie w pełnym ekranie
+  // Zdjęcie w pełnym ekranie
   const handleOpenFullScreen = () => {
-    navigation.navigate('Zdjęcie', { uri: image });
+    navigation.navigate("Zdjęcie", { uri: image });
   };
 
   return (
@@ -136,7 +136,7 @@ export default function NoteEditScreen({ route, navigation }) {
         style={styles.input}
       />
 
-      {/* Wyświetlanie wybranego zdjęcia */}
+      {/* Wyświetlanie zdjęcia z możliwością powiększenia i usunięcia */}
       {image ? (
         <>
           <TouchableOpacity onPress={handleOpenFullScreen}>
@@ -152,7 +152,7 @@ export default function NoteEditScreen({ route, navigation }) {
         </>
       ) : null}
 
-      {/* Akcje związane ze zdjęciem */}
+      {/* Akcje związane z obrazem */}
       <Button mode="outlined" onPress={handlePickImage} style={styles.button}>
         Zrób zdjęcie
       </Button>
@@ -165,7 +165,7 @@ export default function NoteEditScreen({ route, navigation }) {
         Wybierz z galerii
       </Button>
 
-      {/* Zapis notatki */}
+      {/* Przycisk zapisu */}
       <Button mode="contained" onPress={handleSave} style={styles.button}>
         Zapisz
       </Button>
@@ -177,6 +177,7 @@ export default function NoteEditScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: colors.background,
   },
   input: {
     marginBottom: 16,
@@ -185,17 +186,18 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     height: 48,
     borderRadius: 6,
-    justifyContent: 'center',
-    width: '100%',
+    justifyContent: "center",
+    width: "100%",
   },
   removeButton: {
     marginBottom: 16,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 300,
     marginBottom: 8,
     borderRadius: 8,
+    backgroundColor: colors.placeholder,
   },
 });
