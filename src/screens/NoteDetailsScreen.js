@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   StyleSheet,
@@ -7,6 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, Button } from "react-native-paper";
+import colors from "../theme/colors";
 
 // Komponent ekranu szczegółów notatki
 export default function NoteDetailsScreen({ route, navigation }) {
@@ -16,7 +16,7 @@ export default function NoteDetailsScreen({ route, navigation }) {
   // Komunikat o braku notatki
   if (!note) {
     return (
-      <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
+      <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}> 
         <Text style={styles.title}>Nie znaleziono notatki.</Text>
         <Button
           mode="contained"
@@ -30,7 +30,7 @@ export default function NoteDetailsScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
+    <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}> 
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
 
@@ -67,25 +67,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 24,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
-    color: "#000",
+    color: colors.textPrimary,
   },
   content: {
     fontSize: 16,
     marginBottom: 24,
-    color: "#333",
+    color: colors.textSecondary,
   },
   image: {
     width: "100%",
     height: 300,
     borderRadius: 8,
     marginBottom: 24,
-    backgroundColor: "#eee",
+    backgroundColor: colors.placeholder,
   },
   button: {
     width: "100%",
