@@ -13,10 +13,19 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Ta aplikacja potrzebuje dostępu do aparatu, aby robić zdjęcia.",
+        "NSPhotoLibraryUsageDescription": "Ta aplikacja potrzebuje dostępu do galerii, aby wybierać zdjęcia."
+      }
     },
     "android": {
-        "adaptiveIcon": {
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
