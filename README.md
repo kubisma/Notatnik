@@ -32,6 +32,44 @@ Struktura
     • useReducer obsługuje logikę zmian stanu za pomocą akcji.
     • Komponenty uzyskują dostęp do kontekstu przez useContext.
 
+
+### Instalacja i uruchomienie projektu
+
+Wymagania wstępne:
+
+    Node.js (zalecana wersja LTS, np. 18.x)
+
+    npm (lub yarn)
+
+    Expo CLI (możesz zainstalować globalnie: npm install -g expo-cli)
+
+    Emulator Android/iOS lub urządzenie fizyczne z aplikacją Expo Go
+
+Krok po kroku:
+
+    git clone https://github.com/kubisma/Notatnik.git
+    cd Notatnik
+
+    npm install
+
+lub jeśli używasz yarn:
+
+    yarn install
+
+    npm start
+
+lub
+
+    expo start
+
+Uruchom aplikację na wybranej platformie:
+
+    npm run android (Emulator Android)
+
+    npm run ios (Emulator iOS — tylko MacOS)
+
+Lub zeskanuj kod QR w terminalu aplikacją Expo Go na telefonie.
+
 ### Technologie
 
 - [React Native] (https://reactnative.dev/)
