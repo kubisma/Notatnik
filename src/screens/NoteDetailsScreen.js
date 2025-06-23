@@ -16,7 +16,7 @@ export default function NoteDetailsScreen({ route, navigation }) {
   // Komunikat o braku notatki
   if (!note) {
     return (
-      <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}> 
+      <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
         <Text style={styles.title}>Nie znaleziono notatki.</Text>
         <Button
           mode="contained"
@@ -30,7 +30,7 @@ export default function NoteDetailsScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}> 
+    <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
 
