@@ -13,9 +13,6 @@
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/native": "^7.1.9",
     "@react-navigation/stack": "^7.3.2",
-    "eslint": "^9.27.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.0",
     "eslint-plugin-react": "^7.37.5",
     "expo": "~53.0.9",
     "expo-camera": "~16.1.6",
@@ -24,7 +21,6 @@
     "expo-media-library": "~17.1.6",
     "expo-sharing": "~13.1.5",
     "expo-status-bar": "~2.2.3",
-    "prettier": "^3.5.3",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-image-pan-zoom": "^2.1.12",
@@ -35,13 +31,16 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-uuid": "^2.0.3",
-    "react-native-vector-icons": "^10.2.0"  
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/plugin-transform-private-methods": "^7.27.1",
+    "eslint": "^9.29.0",
     "eslint-config-expo": "~9.2.0",
-    "metro-react-native-babel-preset": "^0.77.0"
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "prettier": "^3.6.0"
   },
   "private": true
 }
