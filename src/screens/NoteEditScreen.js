@@ -81,7 +81,8 @@ export default function NoteEditScreen({ route, navigation }) {
   // Wybór zdjęcia z galerii
   const handleChooseFromLibrary = async () => {
     try {
-      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!permission.granted) {
         Alert.alert("Brak dostępu", "Nie masz uprawnień do galerii.");
         return;
@@ -146,6 +147,7 @@ export default function NoteEditScreen({ route, navigation }) {
             mode="text"
             onPress={handleRemoveImage}
             style={styles.removeButton}
+            textColor={colors.error}
           >
             Usuń zdjęcie
           </Button>
