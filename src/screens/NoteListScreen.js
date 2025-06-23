@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback } from "react";
 import {
   FlatList,
   View,
@@ -6,24 +6,24 @@ import {
   useWindowDimensions,
   Text,
   RefreshControl,
-} from 'react-native';
-import { FAB, Card, IconButton, TextInput } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { NoteContext } from '../contexts/NoteContext';
-import { confirmDelete } from '../utils/confirmDelete';
-import colors from '../theme/colors';
+} from "react-native";
+import { FAB, Card, IconButton, TextInput } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { NoteContext } from "../contexts/NoteContext";
+import { confirmDelete } from "../utils/confirmDelete";
+import colors from "../theme/colors";
 
 export default function NoteListScreen() {
   const { notes, deleteNote } = useContext(NoteContext);
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
   // Filtrowanie notatek po tytule
   const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    note.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Obsługa odświeżania listy
@@ -35,8 +35,11 @@ export default function NoteListScreen() {
   // Renderowanie pojedynczego elementu listy
   const renderNoteItem = ({ item }) => (
     <Card
-      style={[styles.card, { width: width * 0.9, backgroundColor: colors.surface }]}
-      onPress={() => navigation.navigate('Szczegóły', { note: item })}
+      style={[
+        styles.card,
+        { width: width * 0.9, backgroundColor: colors.surface },
+      ]}
+      onPress={() => navigation.navigate("Szczegóły", { note: item })}
     >
       <Card.Title
         title={item.title}
@@ -93,7 +96,7 @@ export default function NoteListScreen() {
         style={[styles.fab, { backgroundColor: colors.primary }]}
         icon="plus"
         color={colors.onPrimary}
-        onPress={() => navigation.navigate('Edycja')}
+        onPress={() => navigation.navigate("Edycja")}
       />
     </View>
   );
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   listContent: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingBottom: 100,
   },
   card: {
@@ -121,27 +124,27 @@ const styles = StyleSheet.create({
   },
   cardTitleContainer: {
     minHeight: 64,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   cardTitle: {
     fontSize: 16,
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     color: colors.text,
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 70,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   emptyText: {
     fontSize: 20,
     color: colors.placeholder,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
