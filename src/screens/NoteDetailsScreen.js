@@ -4,6 +4,7 @@ import {
   useWindowDimensions,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { Text, Button } from "react-native-paper";
 import colors from "../theme/colors";
@@ -30,7 +31,12 @@ export default function NoteDetailsScreen({ route, navigation }) {
   }
 
   return (
-    <View style={[styles.container, { paddingHorizontal: width * 0.05 }]}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { paddingHorizontal: width * 0.05 },
+      ]}
+    >
       {/* Tytuł notatki */}
       <Text style={styles.title}>{note.title}</Text>
 
@@ -58,15 +64,16 @@ export default function NoteDetailsScreen({ route, navigation }) {
       >
         Edytuj
       </Button>
-    </View>
+    </ScrollView>
   );
 }
 
 // Style
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingTop: 24,
+    paddingBottom: 32,
     backgroundColor: colors.background,
   },
   title: {
