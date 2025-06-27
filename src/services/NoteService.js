@@ -1,10 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Alert } from "react-native";
 
 const STORAGE_KEY = "NOTES";
 
-// Operacje na notatkach w pamięci urządzenia
 export class NoteService {
+  // Walidacja notatki
+  static validateNote(note) {
+    if (!note?.id || typeof note.title !== "string" || !note.title.trim()) {
+      throw new Error("Nieprawidłowe dane notatki");
+    }
+  }
+
   // Wczytywanie notatek z pamięci
   static async loadNotes() {
     try {
@@ -12,8 +17,7 @@ export class NoteService {
       return data ? JSON.parse(data) : [];
     } catch (error) {
       console.error("Błąd podczas ładowania notatek:", error);
-      Alert.alert("Błąd", "Nie udało się załadować notatek");
-      return [];
+      throw new Error("Nie udało się załadować notatek");
     }
   }
 
@@ -23,17 +27,13 @@ export class NoteService {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
     } catch (error) {
       console.error("Błąd podczas zapisywania notatek:", error);
-      Alert.alert("Błąd", "Nie udało się zapisać notatek");
+      throw new Error("Nie udało się zapisać notatek");
     }
   }
 
   // Dodawanie nowej notatki
   static async addNote(state, note) {
-    if (!note?.id || !note?.title?.trim()) {
-      Alert.alert("Błąd", "Nieprawidłowe dane notatki");
-      return state;
-    }
-
+    this.validateNote(note);
     const updated = [...state, note];
     await this.saveNotes(updated);
     return updated;
@@ -48,13 +48,9 @@ export class NoteService {
 
   // Aktualizacja istniejącej notatki
   static async updateNote(state, updatedNote) {
-    if (!updatedNote?.id || !updatedNote?.title?.trim()) {
-      Alert.alert("Błąd", "Nieprawidłowe dane notatki");
-      return state;
-    }
-
+    this.validateNote(updatedNote);
     const updated = state.map((note) =>
-      note.id === updatedNote.id ? updatedNote : note,
+      note.id === updatedNote.id ? updatedNote : note
     );
     await this.saveNotes(updated);
     return updated;
